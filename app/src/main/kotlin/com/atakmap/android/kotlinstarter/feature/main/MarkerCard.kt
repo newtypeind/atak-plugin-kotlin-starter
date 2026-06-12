@@ -15,7 +15,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.atakmap.android.kotlinstarter.ui.components.ConfirmDialog
 import com.atakmap.android.kotlinstarter.ui.components.DestructiveButton
 import com.atakmap.android.kotlinstarter.ui.components.LabeledTextField
 import com.atakmap.android.kotlinstarter.ui.components.PreviewContainer
@@ -26,9 +25,13 @@ import com.atakmap.android.kotlinstarter.ui.components.StatusTone
 
 /**
  * The "drop a marker on the map" example: a callsign field, a button that places
- * a CoT marker at the self position, and a destructive "remove" guarded by a
- * confirm dialog. Shows how Compose state drives a real ATAK map operation
- * (see [com.atakmap.android.kotlinstarter.PluginController.dropMarkerAtSelf]).
+ * a CoT marker at the self position, and a destructive remove. Shows how Compose
+ * state drives a real ATAK map operation (see
+ * [com.atakmap.android.kotlinstarter.PluginController.dropMarkerAtSelf]).
+ *
+ * [onRemoveRequested] asks the screen to open the confirm dialog; the dialog
+ * itself is hosted at the screen root (see [MainScreenContent]) because an
+ * in-pane modal must overlay the whole pane, not sit inside this card's column.
  */
 @Composable
 fun MarkerCard(
@@ -36,11 +39,9 @@ fun MarkerCard(
     callsign: String,
     onCallsignChange: (String) -> Unit,
     onDrop: () -> Unit,
-    onRemoveAll: () -> Unit,
+    onRemoveRequested: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var confirmRemove by remember { mutableStateOf(false) }
-
     SectionCard(
         title = "Map markers",
         modifier = modifier,
@@ -63,24 +64,10 @@ fun MarkerCard(
         Spacer(Modifier.height(8.dp))
         DestructiveButton(
             text = "Remove my markers",
-            onClick = { confirmRemove = true },
+            onClick = onRemoveRequested,
             modifier = Modifier.fillMaxWidth(),
             enabled = markerCount > 0,
             icon = Icons.Filled.DeleteOutline,
-        )
-    }
-
-    if (confirmRemove) {
-        ConfirmDialog(
-            title = "Remove markers",
-            text = "Remove the $markerCount marker(s) this plugin placed?",
-            confirmLabel = "Remove",
-            destructive = true,
-            onConfirm = {
-                confirmRemove = false
-                onRemoveAll()
-            },
-            onDismiss = { confirmRemove = false },
         )
     }
 }
@@ -95,7 +82,7 @@ private fun MarkerCardPreview() {
             callsign = callsign,
             onCallsignChange = { callsign = it },
             onDrop = {},
-            onRemoveAll = {},
+            onRemoveRequested = {},
         )
     }
 }

@@ -206,6 +206,14 @@ heavily commented. In short:
   plugin + Compose resources) but returns ATAK's real `Application` from
   `getApplicationContext()`.
 
+**Dialogs and popups.** Compose's `Dialog`, `AlertDialog`, `Popup`, and
+`DropdownMenu` each open a brand-new platform window, and inside a plugin that
+window has no valid Activity token, so showing one crashes with
+`BadTokenException: token null is not valid`. Render modal content as an in-pane
+overlay inside the existing `ComposeView` instead: a full-size `Box` with a scrim
+layered over your content, hosted at the screen root. The kit's `ConfirmDialog`
+does exactly this.
+
 `app/build.gradle.kts` bundles `androidx.lifecycle` and `androidx.savedstate` (and
 keeps `androidx.core`) on purpose, and excludes `fragment`, `okhttp`, and `okio`,
 which ATAK provides. Those choices are load-bearing for the bridge; the file

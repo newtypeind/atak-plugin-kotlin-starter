@@ -10,8 +10,9 @@ import com.atakmap.android.kotlinstarter.PluginController
 
 /**
  * The plugin's main screen. Thin stateful wrapper: it collects the controller's
- * [PluginController.state] flow and the local callsign text, then delegates to the
- * stateless [MainScreenContent] (which is what `@Preview` renders).
+ * [PluginController.state] flow plus local UI state (the callsign text and whether
+ * the remove-confirm overlay is open), then delegates to the stateless
+ * [MainScreenContent] (which is what `@Preview` renders).
  */
 @Composable
 fun MainScreen(
@@ -21,16 +22,23 @@ fun MainScreen(
 ) {
     val state by controller.state.collectAsState()
     var callsign by remember { mutableStateOf("") }
+    var confirmRemove by remember { mutableStateOf(false) }
 
     MainScreenContent(
         state = state,
         darkTheme = darkTheme,
         callsign = callsign,
+        showRemoveConfirm = confirmRemove,
         onCallsignChange = { callsign = it },
         onToggleTheme = onToggleTheme,
         onRefresh = controller::refreshLocation,
         onDrop = { controller.dropMarkerAtSelf(callsign) },
-        onRemoveAll = controller::removeOwnMarkers,
+        onRemoveRequested = { confirmRemove = true },
+        onRemoveConfirm = {
+            confirmRemove = false
+            controller.removeOwnMarkers()
+        },
+        onRemoveDismiss = { confirmRemove = false },
         onDismissMessage = controller::clearMessage,
     )
 }
