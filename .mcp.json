@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "atak": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/newtypeind/atak-mcp@v0.2.0",
+        "atak-mcp-server"
+      ]
+    }
+  }
+}

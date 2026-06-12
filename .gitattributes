@@ -1,0 +1,10 @@
+# 3rd-party assets
+app/src/main/assets/mz/*.mztar filter=lfs diff=lfs merge=lfs -text
+app/src/main/assets/mz/*.dict filter=lfs diff=lfs merge=lfs -text
+
+# Native libs
+app/src/main/cpp/libs/**/*.so filter=lfs diff=lfs merge=lfs -text
+
+# Android Build
+*.apk filter=lfs diff=lfs merge=lfs -text
+*.aab filter=lfs diff=lfs merge=lfs -text

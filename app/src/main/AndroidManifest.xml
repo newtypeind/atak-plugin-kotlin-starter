@@ -1,0 +1,42 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="GoogleAppIndexingWarning">
+
+    <!--
+        This starter requests no permissions. ATAK plugin code runs inside ATAK's
+        own process and UID, so any permission you do need (location, camera,
+        microphone, ...) must be granted to the ATAK app, not to this APK. Declare
+        it here AND grant it to ATAK (e.g. `adb shell pm grant com.atakmap.app.civ
+        <permission>`); see the README.
+    -->
+
+    <application
+        android:allowBackup="false"
+        android:description="@string/app_desc"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+        <meta-data
+            android:name="plugin-api"
+            android:value="${atakApiVersion}" />
+        <meta-data
+            android:name="app_desc"
+            android:value="@string/app_desc" />
+
+
+        <!-- This fictitious activity entry allows ATAK 4.6.0.2 and newer to perform
+             plugin discovery on android devices. If this is removed, the plugin will
+             not be able to be discovered or loaded. -->
+        <activity
+            android:name="com.atakmap.app.component"
+            android:exported="true"
+            tools:ignore="MissingClass">
+            <intent-filter android:label="@string/app_name">
+                <action android:name="com.atakmap.app.component" />
+            </intent-filter>
+        </activity>
+
+
+    </application>
+
+</manifest>

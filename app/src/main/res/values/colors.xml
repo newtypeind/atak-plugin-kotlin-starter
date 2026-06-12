@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Android XML colors for the ATAK-themed styles in styles.xml. The Compose UI
+    does not use these; its palette lives in compose/Color.kt.
+-->
+<resources>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+</resources>
