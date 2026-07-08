@@ -82,8 +82,13 @@ fun configProp(key: String): String? =
 
 // Project ext the takdev plugin reads. The takdev plugin calls
 // project.isDevKitEnabled(), so it must exist as a Groovy closure.
-extra["PLUGIN_VERSION"] = "0.1"
-extra["ATAK_VERSION"] = "5.6.0"
+extra["PLUGIN_VERSION"] = "0.2"
+// ATAK version this plugin declares as its `plugin-api` (the host matches it at
+// load). Develop against the 5.7.0 SDK by default; override for a release build
+// targeting another ATAK (e.g. `-Patak.version=5.6.0`, paired with that SDK's
+// `sdk.path`). Set the key `atak.version` in gradle.properties for a durable
+// override.
+extra["ATAK_VERSION"] = configProp("atak.version") ?: "5.7.0"
 extra["takrepoUrl"] = configProp("takrepo.url") ?: "https://localhost/"
 extra["takrepoUser"] = configProp("takrepo.user") ?: "invalid"
 extra["takrepoPassword"] = configProp("takrepo.password") ?: "invalid"

@@ -2,7 +2,7 @@
 #
 # Reload this plugin onto a connected device, hands-free.
 #
-# Why it is shaped this way (learned the hard way against ATAK 5.6.0):
+# Why it is shaped this way (learned the hard way against ATAK 5.7.0):
 #   * ATAK only reliably picks up new plugin CODE after the old package is
 #     uninstalled first - a plain reinstall keeps the previously loaded classes.
 #   * After (re)installing while ATAK is running, ATAK pops a "load this plugin?"

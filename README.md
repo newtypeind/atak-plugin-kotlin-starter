@@ -95,8 +95,8 @@ from these or copy them as a pattern:
 - **JDK 17**
 - **Android SDK** (via Android Studio or the command-line tools)
 - **The ATAK SDK** for the ATAK version you target (this starter targets ATAK
-  **5.6.0 CIV**). See "Get the ATAK SDK" below.
-- A device or emulator with **ATAK CIV installed at the same version** (5.6.0),
+  **5.7.0 CIV**). See "Get the ATAK SDK" below.
+- A device or emulator with **ATAK CIV installed at the same version** (5.7.0),
   USB debugging enabled
 - **adb** on your PATH
 - **uv** (optional) for the `atak-mcp` test bridge used by `scripts/reload.sh`
@@ -114,15 +114,16 @@ the official TAK Product Center:
 
 1. Register and sign in at **https://tak.gov** (account approval is required).
 2. Find the **ATAK-CIV** downloads and get the **SDK** archive for your target
-   version, e.g. `ATAK-CIV-5.6.0-SDK.zip`. While you are there, also download the
-   matching **ATAK CIV APK** (5.6.0) and install it on your device.
+   version, e.g. `ATAK-CIV-5.7.0-SDK.zip`. While you are there, also download the
+   matching **ATAK CIV APK** (5.7.0) and install it on your device.
 3. Unzip the SDK somewhere stable. The directory must contain `main.jar` and
    `atak-gradle-takdev.jar` (it also ships `atak-javadoc.jar`, the development
    guide PDF, the debug keystore, and the SDK samples).
 
 The plugin's ATAK API version and the ATAK app on the device must match. To target
 a different ATAK version, download that SDK, install that ATAK APK, and set
-`ATAK_VERSION` in `app/build.gradle.kts`.
+`atak.version` (in `gradle.properties`, or `-Patak.version=<x.y.z>` on the command
+line); the default lives in `app/build.gradle.kts`.
 
 ## Configure your machine
 
