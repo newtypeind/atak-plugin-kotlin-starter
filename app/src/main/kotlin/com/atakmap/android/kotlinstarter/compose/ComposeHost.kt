@@ -55,7 +55,12 @@ class ComposeHost(private val context: Context) {
         this.scope = scope
 
         composeView.setParentCompositionContext(recomposer)
-        composeView.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnDetachedFromWindow)
+        // Tie composition lifetime to OUR SelectiveLifecycle (disposed only in
+        // [dispose]), not to view attach state — so an ATAK detach/reattach
+        // (navigating to the Tools menu and back) doesn't blank the composition.
+        composeView.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed,
+        )
         composeView.setContent(content)
         scope.launch { recomposer.runRecomposeAndApplyChanges() }
 

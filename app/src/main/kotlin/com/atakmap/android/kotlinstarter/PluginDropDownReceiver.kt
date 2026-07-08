@@ -38,8 +38,17 @@ class PluginDropDownReceiver(
 
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action != SHOW_PLUGIN) return
-        L.d("onReceive SHOW_PLUGIN")
+        L.d("onReceive SHOW_PLUGIN (visible=$isVisible)")
         controller.refreshLocation()
+
+        // Already open with a live Compose view (e.g. re-tapped from the Tools
+        // menu while the pane is still up): re-showing would dispose the live
+        // host and ATAK may not re-attach the replacement, leaving a blank pane.
+        // Keep the live view instead.
+        if (isVisible && composeHost != null) {
+            L.d("plugin already visible — keeping the live view")
+            return
+        }
 
         composeHost?.dispose()
         val host = ComposeHost(ComposeContext(mapView.context, pluginContext))
@@ -59,8 +68,16 @@ class PluginDropDownReceiver(
     override fun onDropDownVisible(v: Boolean) {}
     override fun onDropDownSizeChanged(width: Double, height: Double) {}
     override fun onDropDownClose() {
-        composeHost?.dispose()
-        composeHost = null
+        // Intentionally do NOT dispose the ComposeHost here. ATAK closes and then
+        // immediately re-shows this DropDown through its own backstack (e.g. when
+        // the tool is re-selected from the Tools menu). Because the ComposeView
+        // now disposes its composition on SelectiveLifecycle destroy (see
+        // ComposeHost), destroying the lifecycle on a transient close would make
+        // that reattach reinstall the dispose-strategy on an already-destroyed
+        // lifecycle and crash ("SelectiveLifecycle ... is already destroyed").
+        // The host is disposed lazily on the next open (onReceive) and on teardown
+        // (disposeImpl).
+        L.d("onDropDownClose (host kept alive for possible reattach)")
     }
 
     companion object {
